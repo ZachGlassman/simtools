@@ -1,5 +1,6 @@
 class Parameter(object):
-    def __init__(self, value, min_, max_):
+    def __init__(self, name, value, min_, max_):
+        self.name = name
         self.value = value
         self.min = min_
         self.max = max_
