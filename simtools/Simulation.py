@@ -38,13 +38,14 @@ TIME_UNITS = {'ns': 1e-9, 'us': 1e-6, 'ms': 1e-3, 's': 1}
 class TimeSimulation(BaseSimulation):
     """simulation which depends only on time"""
 
-    def init(self, inital_time, end_time, units):
+    def init(self, func, inital_time, end_time, units):
         assert units in TIME_UNITS, 'Unit must one of {}'.format(
             ",".join(i for i in TIME_UNITS.keys()))
         self._units = units
         self._t_scale = TIME_UNITS[units]
         self._t0 = inital_time
         self._tf = end_time
+        self._func = func
 
     def run_simulation(self):
         """propgate equation through time"""
