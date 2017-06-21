@@ -51,6 +51,9 @@ class ParameterGroup(object):
             for i in params:
                 self.add_parameter(i)
 
+    def param_names(self):
+        return [i.name for i in self._params]
+
     def add_parameter(self, param):
         assert isinstance(
             param, Parameter), "cannot make ParameterGroup of type not Parameter"
@@ -79,3 +82,7 @@ class ParameterGroup(object):
             else:
                 expanded_params[k] = np.array(v[:min_len])
         return [{k: v[i] for k, v in expanded_params.items()} for i in range(min_len)]
+
+    def single(self):
+        """return list with single element with only the value of each parameter"""
+        return [{i.name: i.value for i in self._params}]

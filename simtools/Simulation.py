@@ -1,52 +1,23 @@
-class BaseSimulation(object):
-    """simulation object which is meant to be subclassed by different simulations
+from .ParameterGroup import ParameterGroup
 
-    enforces structure of code"""
 
-    def __init__(self, *args, **kwargs):
-        self.init(*args, **kwargs)
+class Simulation(object):
+    """Simulation object which acts a pipline for different Calculations
+    """
 
-    def run(self, plot=True, *args, **kwargs):
-        """function to run simulation
+    def __init__(self, calculations, parameter_groups, *args, **kwargs):
+        self._calculations = self._generate_calculation_pipline(calculations)
+        self._params = self._validate_parameter_groups(parameter_groups)
 
-        1. checks parameters are proper 
-        2. runs simulation 
-        3. plots results if plot true 
-
-        params:
-          plot:boolean"""
-        res = self.run_simulation(*args, **kwargs)
-        if plot:
-            self.plot()
-
-    def set_params(self):
+    def _generate_calculation_pipline(self, calculations):
         pass
 
-    def plot(self):
-        pass
-
-    def init(self):
-        pass
-
-    def run_simulation(*args, **kwargs):
-        pass
-
-
-TIME_UNITS = {'ns': 1e-9, 'us': 1e-6, 'ms': 1e-3, 's': 1}
-
-
-class TimeSimulation(BaseSimulation):
-    """simulation which depends only on time"""
-
-    def init(self, func, inital_time, end_time, units):
-        assert units in TIME_UNITS, 'Unit must one of {}'.format(
-            ",".join(i for i in TIME_UNITS.keys()))
-        self._units = units
-        self._t_scale = TIME_UNITS[units]
-        self._t0 = inital_time
-        self._tf = end_time
-        self._func = func
-
-    def run_simulation(self):
-        """propgate equation through time"""
-        pass
+    def _validate_parameter_groups(self, p_group):
+        # check for iterable
+        if isinstance(p_group, list) or isinstance(p_group, tuple):
+            return [self._validate_parameter_groups(i) for i in p_group]
+        else:
+            if isinstance(p_group, ParameterGroup):
+                return p_group
+            else:
+                raise Exception('Not a valid parameter Group')
