@@ -18,6 +18,9 @@ class Calculation(object):
         """filepath is where hd5 files are saved"""
         self._func = func
         self._args = inspect.getargspec(func)[0]
+        self.set_args(filepath, id_)
+
+    def set_args(self, filepath, id_):
         self._filepath = filepath
         self._id = id_
 
@@ -54,11 +57,11 @@ class Calculation(object):
         """process results, save to hdf5 file
         build dataframe with parameters and file_paths"""
         d_to_dataframe = []
-        filepath = os.path.join(self._filepath, "{}.h5".format(self._id))
-        with h5py.File(filepath, 'w') as file_:
+        with h5py.File(self._filepath, 'w') as file_:
+            calc_group = file_.create_group(self._id)
             for i, (p, r) in enumerate(zip(params, ans)):
-                temp = {'_file_': filepath, '_group_number_': i}
-                group = file_.create_group('{}'.format(i))
+                temp = {'_group_number_': i}
+                group = calc_group.create_group('{}'.format(i))
                 for k, v in p.items():
                     group.attrs[k] = v
                     temp[k] = v
