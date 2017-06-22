@@ -80,11 +80,10 @@ class Simulation(object):
         # check for iterable
         if isinstance(p_group, list) or isinstance(p_group, tuple):
             return [self._validate_parameter_groups(i) for i in p_group]
+        elif isinstance(p_group, ParameterGroup):
+            return p_group
         else:
-            if isinstance(p_group, ParameterGroup):
-                return p_group
-            else:
-                raise Exception('Not a valid parameter Group')
+            raise Exception('Not a valid parameter Group')
 
     def run(self, expansion_type=None, parallel=False, n_jobs=4):
         # TODO Handle the case where its pipelined in the sense that it uses

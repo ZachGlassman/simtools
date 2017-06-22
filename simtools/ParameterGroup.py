@@ -1,9 +1,12 @@
-import numpy as np
+"""This module exposes an object ParameterGroup which contains a set of Parameter objects
+Each parameter group carries information about expansion which is carried out during the simulation.
+"""
 from itertools import product
+import numpy as np
 
 
 class ExpansionFunction(object):
-    """possible expansions"""
+    """Expansion object which allows naming of an expansion"""
 
     def __init__(self, name, function):
         self.name = name
@@ -21,7 +24,14 @@ _EXPANSIONS = {
 
 
 class Parameter(object):
-    """represents a single parameter in a model"""
+    """represents a single parameter in a model carries information about possible expansion
+    responsible for evaluating expansion during the simulation.
+
+    Parameters
+        ----------
+        name : str
+            name of parameter
+    """
 
     def __init__(self, name, value, expansion=None, args=None):
         self.name = name
@@ -40,11 +50,24 @@ class Parameter(object):
             self.args = ()
 
     def eval_expr(self):
+        """Evaluate the expansion
+        
+        Returns
+        -------
+        expansion : any
+            expansion of variables
+        """
         return self.expansion(*self.args)
 
 
 class ParameterGroup(object):
-    """represents a set of parameters and possible expansions of those parameters"""
+    """represents a set of parameters and possible expansions of those parameters
+    
+    Parameters
+    ---------
+    params : list 
+         list of Parameter objects
+    """
 
     def __init__(self, params=None):
         self._params = []
@@ -53,6 +76,14 @@ class ParameterGroup(object):
                 self.add_parameter(i)
 
     def param_names(self):
+        """Get the names of all the parameters
+        
+
+        Returns
+        -------
+        names : list 
+            list of parameter names
+        """
         return [i.name for i in self._params]
 
     def add_parameter(self, param):
