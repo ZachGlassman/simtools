@@ -14,11 +14,24 @@ except:
 class Calculation(object):
     """function should return dictionary"""
 
-    def __init__(self, func, filepath, id_):
+    def __init__(self, func, filepath, id_, overwrite_file=True):
         """filepath is where hd5 files are saved"""
         self._func = func
         self._args = inspect.getargspec(func)[0]
         self.set_args(filepath, id_)
+        self._prepare_hdf_file(overwrite_file)
+
+    def _prepare_hdf_file(self, overwrite_file):
+        """prepare hdf5file"""
+        if overwrite_file:
+            with h5py.File(self._filepath, 'w') as file_:
+                pass
+        else:
+            # TODO implement check if file exists and raise warning
+            pass
+
+    def get_function_args(self):
+        return self._args
 
     def set_args(self, filepath, id_):
         self._filepath = filepath
@@ -29,8 +42,9 @@ class Calculation(object):
         assert isinstance(
             params, ParameterGroup), "Parameters must be of type Parameter group"
         # check if arguments are in parameters (can be extra)
-        assert min([i in params.param_names()
-                    for i in self._args]) == True, 'Need all of parameters'
+        if self._args != []:
+            assert min([i in params.param_names()
+                        for i in self._args]) == True, 'Need all of parameters'
         self._params = params
 
     def _generate_params(self, expansion_type):
@@ -57,8 +71,8 @@ class Calculation(object):
         """process results, save to hdf5 file
         build dataframe with parameters and file_paths"""
         d_to_dataframe = []
-        with h5py.File(self._filepath, 'w') as file_:
-            calc_group = file_.create_group(self._id)
+        with h5py.File(self._filepath) as file_:
+            calc_group = file_.create_group(str(self._id))
             for i, (p, r) in enumerate(zip(params, ans)):
                 temp = {'_group_number_': i}
                 group = calc_group.create_group('{}'.format(i))

@@ -15,7 +15,8 @@ class ExpansionFunction(object):
 
 _EXPANSIONS = {
     'linspace': ExpansionFunction('linspace', np.linspace),
-    'arange': ExpansionFunction('arange', np.arange)
+    'arange': ExpansionFunction('arange', np.arange),
+    'list': ExpansionFunction('list', list)
 }
 
 
