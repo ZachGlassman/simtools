@@ -140,3 +140,21 @@ class Simulation(object):
                 else:
                     result[name] = d_set
         return params, result
+
+    def _retrieve_result_dataframe(self, pipeline_level):
+        """generate dataframe for pipeline_level"""
+        ans = []
+        with h5py.File(self._filepath) as file_:
+            group = file_['/{}'.format(pipeline_level)]
+            for key in group:
+                result = {}
+                params = {k: v for k, v in group[key].attrs.items()}
+                for name, dataset in group[key].items():
+                    d_set = np.array(dataset)
+                    if d_set.shape == ():
+                        result[name] = int(d_set)
+                    else:
+                        raise Exception(
+                            'Function requires single valued results')
+                ans.append({**params, **result})
+        return pd.DataFrame(ans).set_index(list(params.keys()))
