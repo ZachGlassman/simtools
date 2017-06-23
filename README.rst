@@ -1,4 +1,4 @@
-simtools ![travis-ci](https://travis-ci.org/ZachGlassman/simtools.svg?branch=master)
+simtools [![travis-ci](https://travis-ci.org/ZachGlassman/simtools.svg?branch=master)](https://travis-ci.org/ZachGlassman/simtools.svg?branch=master)
 --------
 
 simtools provides a tool for simulation pipelines in Python.  Its built to be fairly general and can also perform data analysis.
