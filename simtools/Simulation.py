@@ -8,7 +8,7 @@ import time
 
 def parse_time_diff(x):
     """utility function for parsing a time difference to make it nicely readable"""
-    if x > 60:
+    if x >= 60:
         return "{:.2f} min".format(x / 60)
     elif x < .5:
         return "{:.2f} ms".format(x * 1000)

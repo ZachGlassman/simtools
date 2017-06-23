@@ -23,12 +23,9 @@ class Calculation(object):
 
     def _prepare_hdf_file(self, overwrite_file):
         """prepare hdf5file"""
-        if overwrite_file:
+        if overwrite_file or not os.path.isfile(self._filepath):
             with h5py.File(self._filepath, 'w') as file_:
                 pass
-        else:
-            # TODO implement check if file exists and raise warning
-            pass
 
     def get_function_args(self):
         return self._args
