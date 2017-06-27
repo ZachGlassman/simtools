@@ -12,11 +12,24 @@ except:
 
 # TODO Move hdf5 file preparation into simulation not calculation
 
+
 class Calculation(object):
     """function should return dictionary"""
 
-    def __init__(self, func, filepath, id_, overwrite_file=True):
-        """filepath is where hd5 files are saved"""
+    def __init__(self, func, filepath, id_, overwrite_file=False):
+        """Calculation object representing calculation
+
+        Parameters
+        ----------
+        func : function
+            function which is basis of calculation
+        filepath : str
+            filepath to where file for calculation is located
+        id_ : str
+            id for calculation
+        overwrite_file : bool
+            create new file on instantiation (should be false mostly)
+        """
         self._func = func
         self._args = inspect.getargspec(func)[0]
         self.set_args(filepath, id_)
@@ -24,7 +37,7 @@ class Calculation(object):
 
     def _prepare_hdf_file(self, overwrite_file):
         """prepare hdf5file
-        
+
         Parameters
         ----------
         overwrite_file : bool
@@ -37,7 +50,7 @@ class Calculation(object):
 
     def get_function_args(self):
         """get the fileath and id of Calculation
-        
+
         Returns
         -------
         args : list 
@@ -52,7 +65,7 @@ class Calculation(object):
         ----------
         filepath : str
             filepath of calculation results file
-        
+
         id_ : any 
             indentifier for calculation (usually a number)
         """
@@ -61,7 +74,7 @@ class Calculation(object):
 
     def add_params(self, params):
         """add ParameterGroup to simulation and validate its inputs
-        
+
         Parameters
         ----------
         params : ParameterGroup
@@ -82,7 +95,7 @@ class Calculation(object):
         ----------
         expansion_type : str 
             Type of expansion, options are single, zip, outer
-        
+
         Returns
         -------
         param_list : list 
@@ -99,15 +112,15 @@ class Calculation(object):
 
     def run(self, expansion_type=None, parallel=False, n_jobs=4):
         """run the calculation and put into result object
-        
+
         Parameters
         ----------
         expansion_type : str 
             Type of expansion, options are single, zip, outer
-        
+
         parallel : bool
             parallelize calculation over cores
-        
+
         n_jobs : int 
             number of cores to use for parallization
 
@@ -127,7 +140,7 @@ class Calculation(object):
     def _process_results(self, params, ans):
         """process results, save to hdf5 file
         build dataframe with parameters and file_paths
-        
+
         Parameters
         ----------
         params : list 

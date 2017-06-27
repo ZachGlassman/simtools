@@ -7,7 +7,13 @@ import time
 
 
 def parse_time_diff(x):
-    """utility function for parsing a time difference to make it nicely readable"""
+    """utility function for parsing a time difference to make it nicely readable
+
+    Parameters
+    ----------
+    x : float 
+        number which will be formatted
+    """
     if x >= 60:
         return "{:.2f} min".format(x / 60)
     elif x < .5:
@@ -18,6 +24,15 @@ def parse_time_diff(x):
 
 class Simulation(object):
     """Simulation object which acts a pipline for different Calculations
+
+    Parameters
+    ----------
+    filepath : str
+        filepath for file storage 
+    calculations : list[Calculation]
+        list of calculations to perform 
+    parameter_groups : list[ParameterGroup]
+        list of parameter groups for the calculations (may be only the first one)
     """
 
     def __init__(self, filepath, calculations, parameter_groups):
@@ -70,6 +85,15 @@ class Simulation(object):
             return [self._validate_calculation(calculations, 0)]
 
     def _validate_calculation(self, calc, index):
+        """Check that calculation is proper 
+
+        Parameters
+        ----------
+        calc : Calculation
+            calculation
+        index : int 
+            index of calculation in list
+        """
         if isinstance(calc, Calculation):
             calc.set_args(self._filepath, index)
             return calc
